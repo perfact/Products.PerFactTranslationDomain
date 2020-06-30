@@ -1,5 +1,5 @@
 #
-# PerFactTranslationDomain  -  TranslationDomain using an acquired 
+# PerFactTranslationDomain  -  TranslationDomain using an acquired
 #                              translation_service,
 #                              in DB_Utils provided in zI18N Subfolder
 #
@@ -23,13 +23,14 @@
 #
 # $Id: PerFactTranslationDomain.py,v 1.5 2016/06/08 16:45:33 root Exp $
 
+import logging
+
 from zope.interface import implements
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n import interpolate
 
-import logging
-
 LOG = logging.getLogger('PerFactTranslationService')
+
 
 class PerFactTranslationDomain(object):
     """This is a simple implementation of the ITranslationDomain
@@ -50,36 +51,37 @@ class PerFactTranslationDomain(object):
     def translate(self, msgid, mapping=None, context=None,
                   target_language=None, default=None):
         '''See interface ITranslationDomain'''
-        # LOG.info('translate called with '+str((msgid, mapping, context, target_language, default)))
         if context is None:
             LOG.warn("no context!")
-            return None # no translation
+            return None  # no translation
 
         # Find a placeful translation service
         request = context.REQUEST.other
 
-        if request.has_key('_translation_service_cache'):
+        if '_translation_service_cache' in request:
             translation_service = request['_translation_service_cache']
             # LOG.info('Found translation_service in request cache...')
         else:
             # LOG.info('Find translation_service by acquisition')
-            translation_service = getattr(context.other['PARENTS'][0], 'translation_service', None)
+            translation_service = getattr(context.other['PARENTS'][0],
+                                          'translation_service', None)
             # LOG.info(str(translation_service))
             request['_translation_service_cache'] = translation_service
 
         if translation_service is None:
-            # LOG.info('No translation service found, falling back to null translation')
             # no translation, keep orig msgid
             translation_service = self.null_translation
-        text = translation_service(domain=None, msgid=msgid, 
-                                   mapping=mapping, 
+        text = translation_service(domain=None, msgid=msgid,
+                                   mapping=mapping,
                                    target_language=target_language,
                                    default=default)
         return interpolate(text, mapping)
 
     def null_translation(*args, **kw):
         if kw['default'] is None:
-            default = unicode(kw['msgid'])
+            default = kw['msgid']
+            if isinstance(default, bytes):
+                default = default.decode('utf-8')
         else:
             default = kw['default']
         return default

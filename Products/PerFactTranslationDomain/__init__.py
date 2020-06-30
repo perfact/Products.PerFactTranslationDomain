@@ -24,9 +24,9 @@
 
 from PerFactTranslationDomain import PerFactTranslationDomain
 from zope.component import provideUtility
-from zope.component import queryUtility
+# from zope.component import queryUtility
 from zope import interface
-from zope.i18n.interfaces import ITranslationDomain
+# from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.interfaces import IFallbackTranslationDomainFactory
 
 import logging
@@ -34,20 +34,23 @@ LOG = logging.getLogger('PerFactTranslationService.init')
 
 LOG.info('initializing ...')
 
-## the following lines may be used to set up specific 
-## tranlation domains
-#domain=u'pf'
-#perfact_translation = PerFactTranslationDomain(domain)
-#provideUtility(perfact_translation, name=domain)
-#
-#if queryUtility(ITranslationDomain, name=domain) is None:
-#    syslog.syslog('Translation domain NOT instantiated.')
- 
-## if we want to catch all domains, we use a TranslationDomainFactory
+# # the following lines may be used to set up specific
+# # tranlation domains
+# domain=u'pf'
+# perfact_translation = PerFactTranslationDomain(domain)
+# provideUtility(perfact_translation, name=domain)
+
+# if queryUtility(ITranslationDomain, name=domain) is None:
+#     syslog.syslog('Translation domain NOT instantiated.')
+
+# # if we want to catch all domains, we use a TranslationDomainFactory
+
+
 def pf_fallback(domain=u''):
     return PerFactTranslationDomain(domain)
 
-interface.directlyProvides(pf_fallback,IFallbackTranslationDomainFactory,)
+
+interface.directlyProvides(pf_fallback, IFallbackTranslationDomainFactory,)
 provideUtility(pf_fallback)
 
 LOG.info('initialization done.')
