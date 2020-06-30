@@ -13,7 +13,8 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Zope",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: Zope Public License",
+        "License :: OSI Approved :: GNU General Public License v2 or later"
+        " (GPLv2+)",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
@@ -39,7 +40,7 @@ setup(
     install_requires=[
         'zope.component',
         'zope.interface',
-        'zope.i18n.interfaces',
+        'zope.i18n',
     ],
     entry_points="""
 # -*- Entry points: -*-
