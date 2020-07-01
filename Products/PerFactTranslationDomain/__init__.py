@@ -22,14 +22,16 @@
 #
 # $Id: __init__.py,v 1.4 2013/08/08 05:43:40 root Exp $
 
-from PerFactTranslationDomain import PerFactTranslationDomain
-from zope.component import provideUtility
-# from zope.component import queryUtility
-from zope import interface
-# from zope.i18n.interfaces import ITranslationDomain
-from zope.i18n.interfaces import IFallbackTranslationDomainFactory
-
 import logging
+
+from zope.component import provideUtility
+from zope import interface
+from zope.i18n.interfaces import IFallbackTranslationDomainFactory
+# from zope.component import queryUtility
+# from zope.i18n.interfaces import ITranslationDomain
+
+from .PerFactTranslationDomain import PerFactTranslationDomain
+
 LOG = logging.getLogger('PerFactTranslationService.init')
 
 LOG.info('initializing ...')
