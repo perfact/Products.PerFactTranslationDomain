@@ -25,19 +25,19 @@
 
 import logging
 
-from zope.interface import implements
+from zope.interface import implementer
 from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n import interpolate
 
 LOG = logging.getLogger('PerFactTranslationService')
 
 
+@implementer(ITranslationDomain)
 class PerFactTranslationDomain(object):
     """This is a simple implementation of the ITranslationDomain
        that uses the translation_service found in the acquisition path,
        in DB_Utils usually the one implemented in the zI18N folder.
     """
-    implements(ITranslationDomain)
 
     # See zope.i18n.interfaces.ITranslationDomain
     domain = None
@@ -49,7 +49,8 @@ class PerFactTranslationDomain(object):
         self.domain = domain
 
     def translate(self, msgid, mapping=None, context=None,
-                  target_language=None, default=None):
+                  target_language=None, default=None, msgid_plural=None,
+                  default_plural=None, number=None):
         '''See interface ITranslationDomain'''
         if context is None:
             LOG.warn("no context!")
