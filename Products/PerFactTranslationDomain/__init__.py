@@ -22,37 +22,26 @@
 #
 # $Id: __init__.py,v 1.4 2013/08/08 05:43:40 root Exp $
 
-import logging
-
 from zope.component import provideUtility
 from zope import interface
-from zope.i18n.interfaces import IFallbackTranslationDomainFactory
-# from zope.component import queryUtility
-# from zope.i18n.interfaces import ITranslationDomain
+from zope.i18n.interfaces import IFallbackTranslationDomainFactory, \
+    ITranslationDomain
 
-from .PerFactTranslationDomain import PerFactTranslationDomain
+@interface.implementer(ITranslationDomain)
+class Dummy(object):
+    """
+    Dummy translation service that simply returnes a fixed string
+    """
+    # See zope.i18n.interfaces.ITranslationDomain
+    domain = None
 
-LOG = logging.getLogger('PerFactTranslationService.init')
-
-LOG.info('initializing ...')
-
-# # the following lines may be used to set up specific
-# # tranlation domains
-# domain=u'pf'
-# perfact_translation = PerFactTranslationDomain(domain)
-# provideUtility(perfact_translation, name=domain)
-
-# if queryUtility(ITranslationDomain, name=domain) is None:
-#     syslog.syslog('Translation domain NOT instantiated.')
-
-# # if we want to catch all domains, we use a TranslationDomainFactory
-
+    def translate(self, msgid, mapping=None, context=None,
+                  target_language=None, default=None, msgid_plural=None,
+                  default_plural=None, number=None):
+        return 'translated'
 
 def pf_fallback(domain=u''):
-    return PerFactTranslationDomain(domain)
-
+    return Dummy()
 
 interface.directlyProvides(pf_fallback, IFallbackTranslationDomainFactory,)
 provideUtility(pf_fallback)
-
-LOG.info('initialization done.')
