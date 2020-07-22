@@ -3,7 +3,6 @@
 #                              translation_service,
 #                              in DB_Utils provided in zI18N Subfolder
 #
-# $Revision: 1.5 $
 #
 # Copyright (C) 2013 Nils Jungclaus <nils.jungclaus@perfact.de>
 #
@@ -20,8 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-# $Id: PerFactTranslationDomain.py,v 1.5 2016/06/08 16:45:33 root Exp $
 
 import logging
 
@@ -30,6 +27,11 @@ from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n import interpolate
 
 LOG = logging.getLogger('PerFactTranslationService')
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 @implementer(ITranslationDomain)
@@ -44,13 +46,19 @@ class PerFactTranslationDomain(object):
 
     def __init__(self, domain):
         """Initializes the object. No arguments are needed."""
-        # LOG.info('PFTranslationdomain.initialized as '+str(domain))
         # domain is usually "default"
         self.domain = domain
 
     def translate(self, msgid, mapping=None, context=None,
                   target_language=None, default=None, msgid_plural=None,
                   default_plural=None, number=None):
+
+        # Chameleon passes anything that is not a string or number or has an
+        # __html__ attribute through the translation engine. We need to reject
+        # anything that we do not want
+        if not isinstance(msgid, (bytes, unicode)):
+            return msgid
+
         '''See interface ITranslationDomain'''
         if context is None:
             LOG.warn("no context!")
@@ -61,12 +69,9 @@ class PerFactTranslationDomain(object):
 
         if '_translation_service_cache' in request:
             translation_service = request['_translation_service_cache']
-            # LOG.info('Found translation_service in request cache...')
         else:
-            # LOG.info('Find translation_service by acquisition')
             translation_service = getattr(context.other['PARENTS'][0],
                                           'translation_service', None)
-            # LOG.info(str(translation_service))
             request['_translation_service_cache'] = translation_service
 
         if translation_service is None:

@@ -2,7 +2,6 @@
 # __init__.py   -  initialize PerFactTranslationDomain Product
 #                  as default Service via Factory
 #
-# $Revision: 1.4 $
 #
 # Copyright (C) 2013 Nils Jungclaus <nils.jungclaus@perfact.de>
 #
@@ -19,8 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-# $Id: __init__.py,v 1.4 2013/08/08 05:43:40 root Exp $
 
 import logging
 
