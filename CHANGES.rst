@@ -1,7 +1,7 @@
 Changelog
 =========
-2.1.dev0
---------
+2.1 (2020-07-25)
+----------------
 - Compatibility with Chameleon
 
   Chameleon tries to translate everything that is not a string or number or
